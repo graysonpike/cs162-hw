@@ -1,0 +1,31 @@
+3.3.2
+
+* What file format is used for this binary?
+  And what architecture is it compiled for?
+
+The file format is elf64 (64 bit Executable and Linkable Format)
+It is compiled for the i386:x86-64 architecture.
+
+
+
+* What are some of the names of segment/sections you find?
+
+There are sections for storing data such as text, the GNU version, etc.
+Because the executable was compiled with the -g flag, there are also
+debugging sections with labels and other info.
+
+
+
+* What segment/section contains main (the function) and what is the
+  address of main? (It should be the same as what you saw in gdb)
+
+The .text section contains the main function, which has the same address as
+seen in gdb (40062d).
+
+
+
+* Do you see the stack segment anywhere? What about the heap? Explain.
+
+While there is a STACK header in the executable, there are no stack or heap
+sections. This is because the stack and heap are dynamically allocated and not
+part of the program data.
