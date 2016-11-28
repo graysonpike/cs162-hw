@@ -40,7 +40,7 @@ for this frame.
 
 
 * Try info registers. Which registers are holding aspects
-of the program that you recognize?
+  of the program that you recognize?
 
 Registers rax and rdx appear to be holding the value of the current
 char being read from the file. ss is holding the value of the current number
