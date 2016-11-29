@@ -1,0 +1,49 @@
+3.3.3
+
+* Use objdump with the -D flag on the map executable.
+  Which of the addresses from the output of running ./map are defined in
+  the executable, and which segment/section is each defined in?
+
+The main function (_main) is at address 0x4005c2, and is defined in the text section.
+The recursive function (recur) is also defined in the text section
+The main stack is not defined in any section.
+Stack data is defined in the text section.
+The heap addresses are dynamically allocated and aren't defined in any sections.
+The recursive calls aren't defined in the executable either. They are created at runtime.
+
+
+
+* Make a list of the important segments, and what they are used for.
+
+The .text section contains the actual machine instructions which make up your program.
+The .data section contains static data which was defined in your code.
+The .bss section contains uninitialized global or static variables.
+(source: http://www.nongnu.org/avr-libc/user-manual/mem_sections.html)
+
+
+
+* What direction is the stack growing in?
+
+The stack is growing towards smaller memory addresses.
+(0x7fff31a08fbc -> 0x7fffda11f66c)
+
+
+
+* How large is the stack frame for each recursive call?
+
+0x7fff31a08f8c - 0x7fff31a08f5c = 3 * (16 ^ 1) = 48 bytes
+
+
+
+* Where is the heap? What direction is it growing in?
+
+The first heap malloc occurs at address 0x7ea010. It grows towards larger addresses.
+(0x7ea010 -> 0x7ea080)
+
+
+
+* Are the two malloc()ed memory areas contiguous?
+
+No. There are 7 * (16 ^ 1) = 112 bytes between them. The malloc's
+were only creating 100 bytes of usable space, so there is a remaining
+12 bytes between malloc'ed memory areas in the heap.
