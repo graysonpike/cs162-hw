@@ -134,9 +134,25 @@ int main(unused int argc, unused char *argv[]) {
 
         if (fundex >= 0) {
             cmd_table[fundex].fun(tokens);
-        } else {
-            /* REPLACE this to run commands as programs. */
-            fprintf(stdout, "This shell doesn't know how to run programs.\n");
+        } else if(tokens_get_length(tokens) > 0) {
+            // Fork and exec() the requested program (only if there is a request program)
+            pid_t pid = fork();
+            if(pid == 0) {
+                // Child process, exec the requested program
+                char *args[tokens_get_length(tokens) + 1]; // char* array must be NULL terminated
+                for(int i = 0; i < tokens_get_length(tokens); i++) {
+                    args[i] = tokens_get_token(tokens, i);
+                }
+                args[tokens_get_length(tokens)] = NULL;
+                execv(tokens_get_token(tokens, 0), args);
+            } else if (pid > 0) {
+                // Parent process, wait for the child to finish
+                int status;
+                wait(&status);
+            } else {
+                // And error occured while trying to fork
+                printf("ERROR: Failed to fork a new process.\n");
+            }
         }
 
         if (shell_is_interactive)
